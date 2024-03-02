@@ -1,19 +1,29 @@
 import {Component} from 'react'
+import Popup from 'reactjs-popup'
+import {RiCloseLine} from 'react-icons/ri'
+import 'reactjs-popup/dist/index.css'
 import ChoiceButton from '../ChoiceButton'
 import {
   GameContainer,
   HeadingContainer,
   HeadingSubContainer,
   Heading,
+  Paragraph,
   ScoreContainer,
   ButtonsContainer,
   ResultViewContainer,
   ResultStatsContainer,
   ResultPlayerChoiceContainer,
   ResultHeading,
+  Result,
   ResultImage,
   ResultContainer,
   PlayAgainButton,
+  PopupContainer,
+  PopupContentContainer,
+  PopupCloseButton,
+  RulesImage,
+  TriggerButton,
 } from './styledComponent'
 
 const resultStatusConstants = {
@@ -29,14 +39,32 @@ const choices = {
 }
 
 class RockPaperScissors extends Component {
-  state = {isGameRunning: true, playerChoice: 'ROCK', score: 0}
+  state = {isGameRunning: true, playerChoice: '', opponentChoice: '', score: 0}
 
-  onPlaceChoice = choice => {
-    this.setState({playerChoice: choice, isGameRunning: false})
+  onPlaceChoice = (playerChoice, opponentChoice, result) => {
+    if (result === 'tie') {
+      this.setState({playerChoice, opponentChoice, isGameRunning: false})
+    } else if (result === 'won') {
+      this.setState(prevState => ({
+        score: prevState.score + 1,
+        playerChoice,
+        opponentChoice,
+        isGameRunning: false,
+      }))
+    } else {
+      this.setState(prevState => ({
+        score: prevState.score - 1,
+        playerChoice,
+        opponentChoice,
+        isGameRunning: false,
+      }))
+    }
   }
 
   onIncreaseScore = () => {
-    this.setState(prevState => ({score: prevState.score + 1}))
+    this.setState(prevState => ({
+      score: prevState.score + 1,
+    }))
   }
 
   onDecreaseScore = () => {
@@ -65,12 +93,8 @@ class RockPaperScissors extends Component {
   }
 
   getResultView = () => {
-    const {playerChoice} = this.state
+    const {playerChoice, opponentChoice} = this.state
     const {choicesList} = this.props
-    const randomNum = Math.floor(Math.random() * choicesList.length)
-    const opponentChoice = choicesList[randomNum].id
-    console.log(`opp ${opponentChoice}`)
-    console.log(`player ${playerChoice}`)
     const playerChoiceList = choicesList.filter(
       eachObj => eachObj.id === playerChoice,
     )
@@ -87,17 +111,17 @@ class RockPaperScissors extends Component {
         <ResultStatsContainer>
           <ResultPlayerChoiceContainer>
             <ResultHeading>YOU</ResultHeading>
-            <ResultImage src={playerChoiceImgUrl} />
+            <ResultImage src={playerChoiceImgUrl} alt="your choice" />
           </ResultPlayerChoiceContainer>
           <ResultPlayerChoiceContainer>
             <ResultHeading>OPPONENT</ResultHeading>
-            <ResultImage src={opponentChoiceImgUrl} />
+            <ResultImage src={opponentChoiceImgUrl} alt="opponent choice" />
           </ResultPlayerChoiceContainer>
         </ResultStatsContainer>
         <ResultContainer>
-          <ResultHeading>{result}</ResultHeading>
+          <Result>{result}</Result>
           <PlayAgainButton type="button" onClick={this.onPlayAgain}>
-            Play Again
+            PLAY AGAIN
           </PlayAgainButton>
         </ResultContainer>
       </ResultViewContainer>
@@ -112,6 +136,7 @@ class RockPaperScissors extends Component {
           <ChoiceButton
             key={eachObj.id}
             buttonDetails={eachObj}
+            choicesList={choicesList}
             onPlaceChoice={this.onPlaceChoice}
           />
         ))}
@@ -137,23 +162,51 @@ class RockPaperScissors extends Component {
   }
 
   render() {
+    const {score} = this.state
     console.log('render')
     return (
       <GameContainer>
         <HeadingContainer>
           <HeadingSubContainer>
-            <Heading>ROCK</Heading>
-            <Heading>PAPER</Heading>
-            <Heading>SCISSORS</Heading>
+            <Heading>Rock Paper Scissors</Heading>
           </HeadingSubContainer>
           <ScoreContainer>
-            <Heading score="true">Score</Heading>
-            <Heading score="true" fontFamily="true">
-              0
-            </Heading>
+            <Paragraph score="true">Score</Paragraph>
+            <Paragraph score="true" fontFamily="true">
+              {score}
+            </Paragraph>
           </ScoreContainer>
         </HeadingContainer>
         {this.renderGame()}
+        <PopupContainer>
+          <Popup
+            modal
+            trigger={
+              <TriggerButton type="button" className="trigger-button">
+                Rules
+              </TriggerButton>
+            }
+          >
+            {close => (
+              <PopupContentContainer>
+                <PopupCloseButton
+                  type="button"
+                  aria-label="popup close"
+                  className="close-button"
+                  onClick={() => close()}
+                >
+                  <RiCloseLine />
+                </PopupCloseButton>
+                <div>
+                  <RulesImage
+                    src="https://assets.ccbp.in/frontend/react-js/rock-paper-scissor/rules-image.png"
+                    alt="rules"
+                  />
+                </div>
+              </PopupContentContainer>
+            )}
+          </Popup>
+        </PopupContainer>
       </GameContainer>
     )
   }

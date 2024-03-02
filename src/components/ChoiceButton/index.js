@@ -1,7 +1,13 @@
 import {ButtonItem, Button, Image} from './styledComponent'
 
+const choices = {
+  rock: 'ROCK',
+  paper: 'PAPER',
+  scissors: 'SCISSORS',
+}
+
 const ChoiceButton = props => {
-  const {buttonDetails, onPlaceChoice} = props
+  const {buttonDetails, choicesList, onPlaceChoice} = props
   const {id, imageUrl} = buttonDetails
   let testid
   switch (id) {
@@ -20,13 +26,25 @@ const ChoiceButton = props => {
   }
 
   const onClicked = () => {
-    onPlaceChoice(id)
+    const randomNum = Math.floor(Math.random() * choicesList.length)
+    const opponentChoice = choicesList[randomNum].id
+    if (id === opponentChoice) {
+      onPlaceChoice(id, opponentChoice, 'tie')
+    } else if (
+      (id === choices.rock && opponentChoice === choices.scissors) ||
+      (id === choices.paper && opponentChoice === choices.rock) ||
+      (id === choices.scissors && opponentChoice === choices.paper)
+    ) {
+      onPlaceChoice(id, opponentChoice, 'won')
+    } else {
+      onPlaceChoice(id, opponentChoice, 'lost')
+    }
   }
 
   return (
     <ButtonItem>
-      <Button type="button" onClick={onClicked}>
-        <Image src={imageUrl} data-testid={testid} />
+      <Button type="button" onClick={onClicked} data-testid={testid}>
+        <Image src={imageUrl} alt={id} />
       </Button>
     </ButtonItem>
   )

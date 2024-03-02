@@ -25,13 +25,28 @@ export const HeadingContainer = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  @media screen and (max-width: 768px) {
+    width: 90%;
+  }
 `
 
 export const HeadingSubContainer = styled.div`
   margin: 2px;
 `
 
-export const Heading = styled.h3`
+export const Heading = styled.h1`
+  color: ${props => (props.score === 'true' ? '#223a5f' : '#ffffff')};
+  font-weight: ${props =>
+    props.score === 'true' && props.fontFamily === 'true' ? 'bold' : '500'};
+  font-family: ${props =>
+    props.score === 'true' && props.fontFamily === 'true'
+      ? 'Roboto'
+      : 'Bree Serif'};
+  font-size: ${props =>
+    props.score === 'true' && props.fontFamily === 'true' ? '25px' : '18px'};
+  margin: 5px;
+`
+export const Paragraph = styled.p`
   color: ${props => (props.score === 'true' ? '#223a5f' : '#ffffff')};
   font-weight: ${props =>
     props.score === 'true' && props.fontFamily === 'true' ? 'bold' : '500'};
@@ -65,6 +80,9 @@ export const ButtonsContainer = styled.ul`
   align-items: center;
   flex-wrap: wrap;
   list-style: none;
+  @media screen and (max-width: 768px) {
+    width: 90%;
+  }
 `
 
 export const ResultViewContainer = styled.div`
@@ -74,6 +92,9 @@ export const ResultViewContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  @media screen and (max-width: 768px) {
+    width: 70%;
+  }
 `
 
 export const ResultStatsContainer = styled.div`
@@ -93,17 +114,31 @@ export const ResultPlayerChoiceContainer = styled.div`
   align-items: center;
 `
 
-export const ResultHeading = styled.div`
+export const ResultHeading = styled.h2`
   color: #ffffff;
   font-family: 'Roboto';
   font-weight: 500;
+  font-size: 18px;
+  text-align: center;
+  margin-bottom: 5px;
+`
+
+export const Result = styled.p`
+  color: #ffffff;
+  font-family: 'Roboto';
+  font-weight: 500;
+  font-size: 18px;
   text-align: center;
   margin-bottom: 5px;
 `
 
 export const ResultImage = styled.img`
-  height: 200px;
-  width: 200px;
+  height: 220px;
+  width: 220px;
+  @media screen and (max-width: 768px) {
+    height: 120px;
+    width: 120px;
+  }
 `
 
 export const ResultContainer = styled.div`
@@ -113,12 +148,62 @@ export const ResultContainer = styled.div`
   justify-content: center;
   align-items: center;
 `
-export const PlayAgainButton = styled.div`
+export const PlayAgainButton = styled.button`
   background-color: #ffffff;
   color: #223a5f;
   font-family: 'Bree Serif';
+  font-size: 16px;
   padding: 12px 30px 12px;
   border-width: 0px;
   border-radius: 5px;
   cursor: pointer;
+`
+
+export const PopupContainer = styled.div`
+  width: 90%;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`
+
+export const TriggerButton = styled.button`
+  background-color: #ffffff;
+  color: #223a5f;
+  font-family: 'Bree Serif';
+  padding: 10px 20px 10px;
+  border-width: 0px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  align-self: flex-end;
+`
+
+export const PopupContentContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  @media screen and (max-width: 768px) {
+    width: 100%;
+  }
+`
+
+export const PopupCloseButton = styled.button`
+  background-color: transparent;
+  border-width: 0px;
+  cursor: pointer;
+  font-size: 28px;
+  align-self: flex-end;
+`
+
+export const RulesImage = styled.img`
+  height: 500px;
+  width: 600px;
+  @media screen and (max-width: 768px) {
+    height: 200px;
+    width: 200px;
+  }
 `
